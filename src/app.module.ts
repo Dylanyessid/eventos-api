@@ -7,6 +7,7 @@ import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './schemas/user.model';
+import { PasswordService } from './password/password.service';
 
 
 
@@ -33,6 +34,6 @@ import { User } from './schemas/user.model';
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PasswordService],
 })
 export class AppModule {}
