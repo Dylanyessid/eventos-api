@@ -7,8 +7,6 @@ import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './schemas/user.model';
-import { PasswordService } from './password/password.service';
-
 
 
 @Module({
@@ -34,6 +32,6 @@ import { PasswordService } from './password/password.service';
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService, PasswordService],
+  providers: [AppService],
 })
 export class AppModule {}

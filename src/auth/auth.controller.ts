@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { RegisterDTO } from './dto/register.dto';
 import { UsersService } from 'src/users/users.service';
 
+
 @Controller('auth')
 export class AuthController {
 
@@ -11,19 +12,20 @@ export class AuthController {
     @Get()
     async find(){
         await this.authService.getAllUsers()
-        console.log("")
         return 
     }
 
     @Post("/register")
     @HttpCode(HttpStatus.CREATED)
     async register(@Body() data: RegisterDTO){
-        const alreadyExists = Boolean(await this.usersService.getUserByEmail(data.email))
+        const alreadyExists = await this.authService.checkIfUserExists(data.email)
+        if(alreadyExists === null) {
+            throw new HttpException("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
         if(alreadyExists){
             throw new HttpException("User Already Exists", HttpStatus.CONFLICT)
         }
-
-
+        data.password = await this.authService.hashPassword(data.password)
         const newUser = await this.authService.createUser(data)
         return {
             user:newUser
