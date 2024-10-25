@@ -7,6 +7,7 @@ import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './schemas/user.model';
+import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
@@ -29,7 +30,10 @@ import { User } from './schemas/user.model';
       autoLoadModels:true,
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
+    ConfigModule.forRoot({
+      isGlobal:true
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
