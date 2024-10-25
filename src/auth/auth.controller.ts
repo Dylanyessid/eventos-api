@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Post } from
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './dto/register.dto';
 import { UsersService } from 'src/users/users.service';
+import { LoginDTO } from './dto/login.dto';
 
 
 @Controller('auth')
@@ -30,6 +31,24 @@ export class AuthController {
         return {
             user:newUser
         }
+    }
+
+    @Post("/login")
+    @HttpCode(HttpStatus.OK)
+    async login(@Body() data: LoginDTO): Promise<Record<string,string>>{
+        const areValidCredentials = await this.authService.validateUser(data.email, data.password)
+        if(areValidCredentials === null) {
+            throw new HttpException("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+        if(!areValidCredentials){
+            throw new HttpException("Invalid credentials", HttpStatus.UNAUTHORIZED)
+        }
+        return {
+            token: this.authService.login({
+                email:data.email
+            })
+        }
+
     }
 
 
