@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { UsersModule } from 'src/users/users.module';
 import {JwtModule} from "@nestjs/jwt"
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './jwt.strategy';
 @Module({
     imports:[SequelizeModule.forFeature([User]), UsersModule, 
     JwtModule.registerAsync({
@@ -19,6 +20,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     })
     ],
     controllers:[AuthController],
-    providers:[AuthService, UsersService]
+    providers:[AuthService, UsersService, JwtStrategy]
 })
 export class AuthModule {}
