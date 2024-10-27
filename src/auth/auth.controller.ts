@@ -36,17 +36,22 @@ export class AuthController {
     @Post("/login")
     @HttpCode(HttpStatus.OK)
     async login(@Body() data: LoginDTO): Promise<Record<string,string>>{
-        const areValidCredentials = await this.authService.validateUser(data.email, data.password)
+        const result = await this.authService.validateUser(data.email, data.password)
+        const areValidCredentials = result.isValidUser
         if(areValidCredentials === null) {
             throw new HttpException("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR)
         }
         if(!areValidCredentials){
             throw new HttpException("Invalid credentials", HttpStatus.UNAUTHORIZED)
         }
+        const token = await this.authService.login({
+            email:data.email,
+            user:result.id,
+            role:result.role
+        })
+
         return {
-            token: this.authService.login({
-                email:data.email
-            })
+            token
         }
 
     }

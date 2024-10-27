@@ -8,8 +8,9 @@ import { UsersModule } from 'src/users/users.module';
 import {JwtModule} from "@nestjs/jwt"
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
+import { UserRole } from 'src/schemas/userRoles.model';
 @Module({
-    imports:[SequelizeModule.forFeature([User]), UsersModule, 
+    imports:[SequelizeModule.forFeature([User, UserRole]), UsersModule, 
     JwtModule.registerAsync({
         imports: [ConfigModule], // Importar ConfigModule para acceder a las variables de entorno
         useFactory: async (configService: ConfigService) => ({
