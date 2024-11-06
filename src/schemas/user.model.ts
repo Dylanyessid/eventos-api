@@ -25,5 +25,5 @@ export class User extends Model<User>{
        field:'deleted_at',
        allowNull:true
     })
-    deletedAt:string
+    deletedAt:Date
 }
