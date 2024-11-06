@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '../schemas/user.model';
 import { RegisterDTO } from './dto/register.dto';
+import { UsersService } from 'src/users/users.service';
 import { genSalt, hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserRole } from '../schemas/userRoles.model';
-import { RoleEnum } from '../types/enums/role';
+import { UserRole } from 'src/schemas/userRoles.model';
+import { RoleEnum } from 'src/types/enums/role';
 import {Sequelize} from 'sequelize-typescript';
 
 interface IValidateResult {
