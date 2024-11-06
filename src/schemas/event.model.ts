@@ -1,7 +1,7 @@
 import { Column, DataType, Model, Table } from "sequelize-typescript";
 
 @Table({tableName:"events", timestamps:false})
-export class Events extends Model<Events> {
+export class Event extends Model<Event> {
 
     @Column({
         type:DataType.INTEGER,
@@ -21,17 +21,17 @@ export class Events extends Model<Events> {
         field:'start_date',
         allowNull:false
      })
-    startDate:string
+    startDate:Date
 
     @Column({
         type:DataType.DATE,
         field:'end_date',
         allowNull:false
      })
-    endDate:string
+    endDate:Date
     
     @Column
-    locations:string
+    location:string
 
     @Column
     capacity:number
@@ -41,5 +41,5 @@ export class Events extends Model<Events> {
         field:'deleted_at',
         allowNull:true
      })
-     deletedAt:string
+     deletedAt:Date
 }
