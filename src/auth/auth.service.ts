@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from 'src/schemas/user.model';
+import { User } from '../schemas/user.model';
 import { RegisterDTO } from './dto/register.dto';
 import { UsersService } from 'src/users/users.service';
 import { genSalt, hash, compare } from 'bcrypt';
