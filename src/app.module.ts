@@ -8,6 +8,7 @@ import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './schemas/user.model';
 import { ConfigModule } from '@nestjs/config';
+import { EventsModule } from './events/events.module';
 
 
 @Module({
@@ -33,7 +34,8 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     ConfigModule.forRoot({
       isGlobal:true
-    })
+    }),
+    EventsModule
   ],
   controllers: [AppController],
   providers: [AppService],
