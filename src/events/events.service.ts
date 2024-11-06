@@ -5,26 +5,24 @@ import { CreateEventDTO } from './dto/createEvent.dto';
 
 @Injectable()
 export class EventsService {
-    
-    constructor(@InjectModel(Event) private readonly eventModel: typeof Event){
+  constructor(@InjectModel(Event) private readonly eventModel: typeof Event) {}
 
-    }
+  async createEvent(data: CreateEventDTO): Promise<Event | null> {
+    const { name, capacity, description, endDate, location, startDate } = data;
+    return this.eventModel
+      .build({
+        name,
+        capacity,
+        description,
+        endDate: new Date(endDate),
+        startDate: new Date(startDate),
+        location,
+      })
+      .save();
+  }
 
+  async getById(id:number){
+    return this.eventModel.findOne({where:{deletedAt: null, id}})
 
-    
-    async createEvent (data:CreateEventDTO):Promise<Event | null> {
-        const {name, capacity ,description, endDate, location, startDate} = data
-        return this.eventModel.build(
-            {
-                name,
-                capacity,
-                description,
-                endDate: new Date(endDate),
-                startDate: new Date(startDate),
-                location
-            }
-         ).save()
-    }
-
-
+  }
 }
