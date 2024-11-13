@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './schemas/user.model';
 import { ConfigModule } from '@nestjs/config';
 import { EventsModule } from './events/events.module';
+import { APP_GUARD, Reflector } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 
 @Module({
@@ -35,9 +37,16 @@ import { EventsModule } from './events/events.module';
     ConfigModule.forRoot({
       isGlobal:true
     }),
-    EventsModule
+    EventsModule,
+
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass:JwtAuthGuard
+    },
+    Reflector
+  ],
 })
 export class AppModule {}
