@@ -2,6 +2,8 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } f
 import { EventsService } from './events.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateEventDTO } from './dto/createEvent.dto';
+import { Roles } from 'src/decorators/authorization.decorator';
+import { RoleEnum } from 'src/types/enums/role';
 
 @Controller('events')
 export class EventsController {
@@ -21,6 +23,7 @@ export class EventsController {
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     @HttpCode(HttpStatus.CREATED)
+    @Roles(RoleEnum.USER)
     async getById (@Param('id') id:string){
         const event = await this.eventService.getById(Number(id))
         return event;
