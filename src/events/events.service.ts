@@ -25,4 +25,8 @@ export class EventsService {
     return this.eventModel.findOne({where:{deletedAt: null, id}})
 
   }
+
+  async getAll(page:number,limit:number){
+    return this.eventModel.findAll({where:{deletedAt: null}, offset: (page - 1) * limit, limit})
+  }
 }
