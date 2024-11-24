@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { RegisterDTO } from './dto/register.dto';
 import { UsersService } from 'src/users/users.service';
 import { LoginDTO } from './dto/login.dto';
+import { SkipJwtValidation } from 'src/decorators/skip-jwt.decorator';
 
 
 @Controller('auth')
@@ -17,6 +18,7 @@ export class AuthController {
     }
 
     @Post("/register")
+    @SkipJwtValidation()
     @HttpCode(HttpStatus.CREATED)
     async register(@Body() data: RegisterDTO){
         const alreadyExists = await this.authService.checkIfUserExists(data.email)
@@ -34,6 +36,7 @@ export class AuthController {
     }
 
     @Post("/login")
+    @SkipJwtValidation()
     @HttpCode(HttpStatus.OK)
     async login(@Body() data: LoginDTO): Promise<Record<string,string>>{
         const result = await this.authService.validateUser(data.email, data.password)

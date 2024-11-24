@@ -9,8 +9,9 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './schemas/user.model';
 import { ConfigModule } from '@nestjs/config';
 import { EventsModule } from './events/events.module';
-import { APP_GUARD, Reflector } from '@nestjs/core';
+import { APP_GUARD, Reflector, APP_FILTER } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { AllExceptionsFilter } from './filters/exceptionsFilter';
 
 
 @Module({
@@ -43,9 +44,14 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
   controllers: [AppController],
   providers: [AppService,
     {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter
+    },
+    {
       provide: APP_GUARD,
       useClass:JwtAuthGuard
     },
+    
     Reflector
   ],
 })
