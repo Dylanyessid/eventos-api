@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateEventDTO } from './dto/createEvent.dto';
@@ -25,12 +25,27 @@ export class EventsController {
 
     
     @Get(':id')
-    @HttpCode(HttpStatus.CREATED)
+    @HttpCode(HttpStatus.OK)
     @Roles(RoleEnum.USER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     async getById (@Param('id') id:string){
         const event = await this.eventService.getById(Number(id))
         return event;
     }
+
+    @Get('/')
+    @HttpCode(HttpStatus.OK)
+    @Roles(RoleEnum.USER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    async getAll(
+        @Query('page') page: string = '1', // Página por defecto
+        @Query('limit') limit: string = '10'
+    ){
+
+        const events = await this.eventService.getAll(Number(page),Number(limit))
+        return events;
+    }
+
+    
 
 }
