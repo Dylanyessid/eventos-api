@@ -1,9 +1,6 @@
 import { IsDateString, IsNotEmpty } from "class-validator";
 
 export class CreateEventDTO {
-    
-
-
     @IsNotEmpty()
     name: string;
 
