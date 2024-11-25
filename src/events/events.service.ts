@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Event } from 'src/schemas/event.model';
 import { CreateEventDTO } from './dto/createEvent.dto';
+import { UpdateEventDTO } from './dto/updateEvent.dto';
 
 @Injectable()
 export class EventsService {
@@ -28,5 +29,23 @@ export class EventsService {
 
   async getAll(page:number,limit:number){
     return this.eventModel.findAll({where:{deletedAt: null}, offset: (page - 1) * limit, limit})
+  }
+
+  async delete(id:number){
+    return this.eventModel.update({deletedAt: new Date()},{where:{id}})
+  }
+
+  async update(id:number,data:UpdateEventDTO){
+    const transformedData = {}
+    Object.keys(data).forEach(key => {
+      const parsedDate = new Date(data[key]).getTime()
+      if (!isNaN(parsedDate)) {
+        transformedData[key] = new Date(parsedDate);
+      }else{
+        transformedData[key] = data[key]
+      }
+    })
+
+    return this.eventModel.update(transformedData,{where:{id}, returning:true})
   }
 }
