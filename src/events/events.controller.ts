@@ -1,10 +1,11 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateEventDTO } from './dto/createEvent.dto';
 import { Roles } from 'src/decorators/authorization.decorator';
 import { RoleEnum } from 'src/types/enums/role';
 import { RolesGuard } from 'src/roles/roles.guard';
+import { UpdateEventDTO } from './dto/updateEvent.dto';
 
 @Controller('events')
 export class EventsController {
@@ -45,7 +46,21 @@ export class EventsController {
         const events = await this.eventService.getAll(Number(page),Number(limit))
         return events;
     }
+    @Delete('/:id')
+    @HttpCode(HttpStatus.OK)
+    @Roles(RoleEnum.ORGANIZER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    async delete(@Param('id') id:string){
+        const event = await this.eventService.delete(Number(id))
+    }
 
-    
+    @Put('/:id')
+    @HttpCode(HttpStatus.OK)
+    @Roles(RoleEnum.ORGANIZER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    async update(@Param('id') id:string, @Body() updateEventDTO:UpdateEventDTO){
+        const [_,event] = await this.eventService.update(Number(id),updateEventDTO)
+        return event
+    }
 
 }
