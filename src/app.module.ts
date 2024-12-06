@@ -7,7 +7,7 @@ import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './schemas/user.model';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventsModule } from './events/events.module';
 import { APP_GUARD, Reflector, APP_FILTER } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
@@ -16,22 +16,28 @@ import { AllExceptionsFilter } from './filters/exceptionsFilter';
 
 @Module({
   imports: [
-    SequelizeModule.forRoot({
-      define:{
-        scopes:{
-          excludeCreatedAtUpdateAt:{
-            
+    ConfigModule.forRoot(),
+    SequelizeModule.forRootAsync({
+      imports:[ConfigModule],
+      useFactory:(configService:ConfigService)=>({
+        define:{
+          scopes:{
+            excludeCreatedAtUpdateAt:{
+              
+            }
           }
-        }
-      },
-      dialect:'postgres',
-      host:'localhost',
-      port:5432,
-      username:'postgres',
-      password:'*****',
-      database:'events_app',
-      models:[User],
-      autoLoadModels:true,
+        },
+        
+        dialect:'postgres',
+        host:configService.get('DB_HOST'),
+        port:configService.get('DB_PORT'),
+        username:configService.get('DB_USERNAME'),
+        password:configService.get('DB_PASSWORD'),
+        database:configService.get('DB_DATABASE'),
+        models:[User],
+        autoLoadModels:true,
+      }),
+      inject:[ConfigService]
     }),
     UsersModule,
     AuthModule,
