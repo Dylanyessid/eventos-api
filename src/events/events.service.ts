@@ -1,4 +1,8 @@
+
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+
 import { Injectable } from '@nestjs/common';
+
 import { InjectModel } from '@nestjs/sequelize';
 import { Event } from 'src/schemas/event.model';
 import { CreateEventDTO } from './dto/createEvent.dto';
@@ -23,6 +27,11 @@ export class EventsService {
   }
 
   async getById(id:number){
+
+    if(!id ) throw new HttpException('Id is required', HttpStatus.BAD_REQUEST)
+    if(typeof id !== 'number' || isNaN(id) || id < 0) throw new HttpException('Id is not valid', HttpStatus.BAD_REQUEST)
+    
+
     return this.eventModel.findOne({where:{deletedAt: null, id}})
 
   }
