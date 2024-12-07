@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  postgres_db:
+    image: postgres:15
+    container_name: postgres-container
+    environment:
+        POSTGRES_USER: ${DB_USERNAME}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        POSTGRES_DB: ${DB_DATABASE}
+    env_file:
+      - .env
+    volumes:
+      - ./sql.sql:/docker-entrypoint-initdb.d/sql.sql
+    ports:
+      - "9000:5432"
+    networks:
+      - backend
+
+  events-api:
+    build: .
+    container_name: events-api
+    ports:
+      - 7000:3000
+    depends_on:
+      - postgres_db
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      DB_HOST: postgres_db
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+    env_file:
+      - .env
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
