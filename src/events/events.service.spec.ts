@@ -56,10 +56,12 @@ describe('EventsService', () => {
       expect(error.message).toBe('Id is required')
     }
   });
-});
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 });
+
+  
+
 
