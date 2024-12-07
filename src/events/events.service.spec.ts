@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventsService } from './events.service';
+
 import { getModelToken } from '@nestjs/sequelize';
 import { Event } from 'src/schemas/event.model';
+
 
 describe('EventsService', () => {
   let service: EventsService;
@@ -41,6 +43,7 @@ describe('EventsService', () => {
     service = module.get<EventsService>(EventsService);
   });
 
+
   it('should get event by id', async () => {
     const a = await  service.getById(1)
     expect(a).toBeDefined()
@@ -54,3 +57,9 @@ describe('EventsService', () => {
     }
   });
 });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+});
+
